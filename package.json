@@ -1,7 +1,7 @@
 {
   "name": "pyrocko-gf-view",
   "version": "1.0.0",
-  "description": "Pyrocko Green's function explorer",
+  "description": "Pyrocko Green's function browser",
   "author": "miili <isken@gfz-potsdam.de>",
   "private": true,
   "scripts": {

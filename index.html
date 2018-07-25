@@ -3,19 +3,52 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <title>Pyrocko Online Green's function Explorer</title>
+    <title>Pyrocko Green's function Browser</title>
+    <link rel="stylesheet" href="//cdn.materialdesignicons.com/2.0.46/css/materialdesignicons.min.css">
   </head>
   <body>
     <section class="section">
-        <div class="container">
-            <h1 class="title">Pyrocko Online Green's functions</h1>
-            <h2 class="subtitle">
-              Explore and download pre-calculated Green's function databases
-            </h2>
-        </div>
+      <div class="container">
+        <h1 class="title">Pyrocko Online Green's Functions</h1>
+        <h2 class="subtitle">
+          Browse and download pre-calculated Green's function databases
+        </h2>
+      </div>
     </section>
+    <div class="container content">
+      This online repository holds pre-calculated Green's function stores for different spatial scales and sampling frequencies.
+      <p>
+        You can download the store with fomosto: <code>fomosto download http://kinherd.org:8080 &lt;ah_store&gt;</code>.
+      </p>
+      <p>
+        <a href="https://pyrocko.org/docs/current/apps/fomosto/">See the documentation</a> for more information on Pyrocko's Green's function stores.
+      </p>
+    </div>
     <div id="app"></div>
     <!-- built files will be auto injected -->
+    <section class="section">
+      <div class="container column content">
+        <h2 class="subtitle">References</h2>
+        <ol>
+          <li>
+            Aki, Keiiti, and Paul G. Richards. Quantitative seismology. Vol. 1. 2002.
+          </li>
+          <li>
+            Wang, R., F. Lorenzo-Martín and F. Roth (2003), Computation of deformation induced by earthquakes in a multi-layered elastic crust - FORTRAN programs EDGRN/EDCMP, Computer and Geosciences, 29(2), 195-207.
+          </li>
+          <li>
+            Wang, R., F. Lorenzo-Martin and F. Roth (2006), PSGRN/PSCMP - a new code for calculating co- and post-seismic deformation, geoid and gravity changes based on the viscoelastic-gravitational dislocation theory, Computers and Geosciences, 32, 527-541. DOI:10.1016/j.cageo.2005.08.006.
+          </li>
+          <li>
+            Wang, R. et al. (2017), Complete synthetic seismograms based on a spherical self-gravitating Earth model with an atmosphere-ocean-mantle-core structure, Geopysical Journal International, 210(3), 1739-1764, DOI:10.1093/gji/ggx259
+          </li>
+          <li>
+            Wang, R., (1999), A simple orthonormalization method for stable and efficient computation of Green’s functions, Bulletin of the Seismological Society of America, 89(3), 733-741.0
+          </li>
+        </ol>
+        </div>
+      </div>
+    </section>
     <footer class="footer">
       <div class="content has-text-centered">
         <p>
