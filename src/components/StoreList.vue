@@ -6,6 +6,9 @@
           <h3 class="subtitle">
             Selection
           </h3>
+          <b-field width=20>
+              <b-input v-model="searchStore" placeholder="search store"></b-input>
+          </b-field>
           <h4 class="subtitle">
             Extent
           </h4>
@@ -13,7 +16,10 @@
               <b-switch size="is-small" type="is-light" v-model="showGlobal">Global</b-switch>
             </div>
             <div class="field">
-              <b-switch size="is-small" type="is-light" v-model="showCRUST2">CRUST2</b-switch>
+              <b-switch size="is-small" type="is-light" v-model="showRegional">Regional</b-switch>
+            </div>
+            <div class="field">
+              <b-switch size="is-small" type="is-light" v-model="showLocal">Local</b-switch>
             </div>
             <h4 class="subtitle">
               Sampling Rate
@@ -85,16 +91,16 @@
             <b-table-column field="type" label="Type">
               <b-tag>{{ store.row.short_type }}</b-tag>
             </b-table-column>
-            <b-table-column field="extent" label="↔ Extent (km)" class="has-text-right">
+            <b-table-column field="hor_extent" label="↔ Extent (km)" class="has-text-right">
               {{ store.row.distance_min | as_km }} - {{ store.row.distance_max | as_km }}
             </b-table-column>
-            <b-table-column field="extent">
+            <b-table-column field="hor_spacing">
               Δ {{ store.row.distance_delta | as_km }} km
             </b-table-column>
-            <b-table-column field="extent" label="↕ Depth (km)" class="has-text-right">
+            <b-table-column field="ver_extent" label="↕ Depth (km)" class="has-text-right">
               {{ store.row.source_depth_min | as_km }} - {{ store.row.source_depth_max | as_km }}
             </b-table-column>
-            <b-table-column field="extent" label=" ">
+            <b-table-column field="ver_spacing" label=" ">
               Δ {{ store.row.source_depth_delta | as_km }} km
             </b-table-column>
             <b-table-column field="sample_rate" label="Sample Rate" class="has-text-right" sortable>
@@ -103,9 +109,9 @@
           </template>
 
           <template slot="detail" slot-scope="store">
-            <div class="column content" style="padding-top: 0px">
+            <div class="column content" style="padding-top: 0px;">
               <div class="columns">
-                <div class="column">
+                <div class="column is-3">
                   <h2>Modelling Code</h2>
                   <p>
                     <span class="tag is-success is-uppercase">{{ store.row.modelling_code_id }}</span>
@@ -117,8 +123,15 @@
                     <span class="tag is-success is-uppercase">{{ store.row.size | prettyBytes }}</span>
                   </p>
                 </div>
-                <div class="column has-text-right">
-                  <button class="button" @click="showConfig(store)">Show Config</button>
+              </div>
+            </div>
+            <div class="column content" style="padding-top: 0px; padding-bottom: 0px;">
+              <div class="columns">
+                <div class="column is-3 has-text-left">
+                  <button class="button" @click="showConfig(store)">Show config</button>
+                </div>
+                <div class="column has-text-left">
+                  <button class="button" @click="goToStore(store.row.id)">Show store</button>
                 </div>
               </div>
             </div>
@@ -155,19 +168,24 @@
 <script>
 import axios from 'axios'
 
+const km = 1000.0
+
 export default {
   name: 'StoreList',
 
   data () {
     return {
-      api_endpoint: 'http://localhost:8085/gfws/static/api/',
+      api_endpoint: 'http://localhost:8085/gfws/api/',
+      static_endpoint: 'http://localhost:8085/gfws/static/',
       isEmpty: true,
       data: undefined,
       defaultOpenedDetails: ['ah_store'],
       modalData: undefined,
 
+      searchStore: '',
       showGlobal: true,
-      showCRUST2: true,
+      showRegional: true,
+      showLocal: true,
       showSampling1Hz: true,
       showSampling2Hz: true,
       showSampling4Hz: true,
@@ -192,12 +210,17 @@ export default {
           console.log(error)
         })
     },
+    goToStore (storeId) {
+      window.location.href = `${this.static_endpoint}stores/${storeId}`
+    },
     closeConfig () {
       this.modalData = undefined
     },
     resetForm () {
+      this.searchStore = ''
       this.showGlobal = true
-      this.showCRUST2 = true
+      this.showRegional = true
+      this.showLocal = true
       this.showSampling1Hz = true
       this.showSampling2Hz = true
       this.showSampling4Hz = true
@@ -226,14 +249,20 @@ export default {
       }
 
       var stores = []
+      var search = new RegExp(this.searchStore, 'i')
+
       for (var is = 0; is < this.data.stores.length; is++) {
         var store = this.data.stores[is]
 
         // Extent
-        if (!this.showGlobal && store.id.search('global') >= 0) {
+        var extentKm = store.distance_max / km
+        if (!this.showGlobal && extentKm > 1000) {
           continue
         }
-        if (!this.showCRUST2 && store.id.search('crust2') >= 0) {
+        if (!this.showRegional && extentKm >= 100 && extentKm <= 1000) {
+          continue
+        }
+        if (!this.showLocal && extentKm < 100) {
           continue
         }
 
@@ -260,6 +289,12 @@ export default {
         }
         if (!this.showPSGRNPSCMP && store.modelling_code_id.search('psgrn_pscmp') >= 0) {
           continue
+        }
+
+        if (this.searchStore !== '') {
+          if (store.id.search(search) < 0) {
+            continue
+          }
         }
 
         stores.push(store)
