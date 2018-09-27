@@ -1,6 +1,7 @@
-# pyrocko-gf-explorer
+# Green's Mill
+### Pyrocko Green's function explorer
 
-> Pyrocko Green's function explorer
+Online Green's function explorer at https://greens-mill.pyrocko.org
 
 ## Build Setup
 
