@@ -175,8 +175,8 @@ export default {
 
   data () {
     return {
-      api_endpoint: 'http://localhost:8085/gfws/api/',
-      static_endpoint: 'http://localhost:8085/gfws/static/',
+      api_endpoint: 'http://kinherd.org:8080/gfws/api/',
+      static_endpoint: 'http://kinherd.org:8080/gfws/static/',
       isEmpty: true,
       data: undefined,
       defaultOpenedDetails: ['ah_store'],
