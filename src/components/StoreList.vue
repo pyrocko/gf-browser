@@ -34,7 +34,7 @@
               <b-switch size="is-small" type="is-light" v-model="showSampling2Hz">&le; 2 Hz</b-switch>
             </div>
             <div class="field">
-              <b-switch size="is-small" type="is-light" v-model="showSampling4Hz">&ge; 4 Hz</b-switch>
+              <b-switch size="is-small" type="is-light" v-model="showSamplingGt2Hz">&gt; 2 Hz</b-switch>
             </div>
             <h4 class="subtitle">
               Backends
@@ -192,7 +192,7 @@ export default {
       showLocal: true,
       showSampling1Hz: true,
       showSampling2Hz: true,
-      showSampling4Hz: true,
+      showSamplingGt2Hz: true,
 
       showAhfullgreen: true,
       showQSEIS: true,
@@ -227,7 +227,7 @@ export default {
       this.showLocal = true
       this.showSampling1Hz = true
       this.showSampling2Hz = true
-      this.showSampling4Hz = true
+      this.showSamplingGt2Hz = true
       this.showAhfullgreen = true
       this.showQSEIS = true
       this.showQSSP = true
@@ -276,7 +276,7 @@ export default {
         if (!this.showSampling2Hz && store.sample_rate <= 2.0 && store.sample_rate > 1.0) {
           continue
         }
-        if (!this.showSampling4Hz && store.sample_rate >= 4.0 && store.sample_rate > 2.0) {
+        if (!this.showSamplingGt2Hz && store.sample_rate > 2.0) {
           continue
         }
 
