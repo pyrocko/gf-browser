@@ -146,7 +146,7 @@
             <div class="column">
               Download this GF store with
               <code>
-                fomosto download kinherd.org:8080 {{ store.row.id }}
+                fomosto download kinherd.org {{ store.row.id }}
               </code>
             </div>
           </template>
