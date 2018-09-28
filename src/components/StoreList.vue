@@ -6,9 +6,12 @@
           <h3 class="subtitle">
             Selection
           </h3>
-          <b-field width=20>
+          <b-field style="margin-bottom: 0.25rem;">
               <b-input v-model="searchStore" placeholder="search store"></b-input>
           </b-field>
+          <p style="font-size: 70%; color: #999;">
+            {{ store_list.length }} stores selected
+          </p>
           <h4 class="subtitle">
             Extent
           </h4>
@@ -25,13 +28,13 @@
               Sampling Rate
             </h4>
             <div class="field">
-              <b-switch size="is-small" type="is-light" v-model="showSampling1Hz">>= 1 Hz</b-switch>
+              <b-switch size="is-small" type="is-light" v-model="showSampling1Hz">&le; 1 Hz</b-switch>
             </div>
             <div class="field">
-              <b-switch size="is-small" type="is-light" v-model="showSampling2Hz">>= 2 Hz</b-switch>
+              <b-switch size="is-small" type="is-light" v-model="showSampling2Hz">&le; 2 Hz</b-switch>
             </div>
             <div class="field">
-              <b-switch size="is-small" type="is-light" v-model="showSampling4Hz">>= 4 Hz</b-switch>
+              <b-switch size="is-small" type="is-light" v-model="showSampling4Hz">&ge; 4 Hz</b-switch>
             </div>
             <h4 class="subtitle">
               Backends
@@ -77,6 +80,7 @@
           :striped="false"
           :hoverable="true"
           :is-loading="isEmpty"
+          :loading="isEmpty"
           :mobile-cards="true"
 
           detailed
@@ -175,8 +179,8 @@ export default {
 
   data () {
     return {
-      api_endpoint: 'http://kinherd.org:8080/gfws/api/',
-      static_endpoint: 'http://kinherd.org:8080/gfws/static/',
+      api_endpoint: 'https://greens-mill.pyrocko.org/api/',
+      static_endpoint: 'http://kinherd.org/gfws/static/',
       isEmpty: true,
       data: undefined,
       defaultOpenedDetails: ['ah_store'],
@@ -235,7 +239,6 @@ export default {
       .get(this.api_endpoint)
       .then(response => {
         this.data = response.data
-        console.log(this.data)
         this.isEmpty = false
       })
       .catch(error => {
@@ -267,13 +270,13 @@ export default {
         }
 
         // Sampling Rate
-        if (!this.showSampling1Hz && store.sample_rate >= 1) {
+        if (!this.showSampling1Hz && store.sample_rate <= 1.0) {
           continue
         }
-        if (!this.showSampling2Hz && store.sample_rate >= 2) {
+        if (!this.showSampling2Hz && store.sample_rate <= 2.0 && store.sample_rate > 1.0) {
           continue
         }
-        if (!this.showSampling4Hz && store.sample_rate >= 4) {
+        if (!this.showSampling4Hz && store.sample_rate >= 4.0 && store.sample_rate > 2.0) {
           continue
         }
 
