@@ -41,7 +41,7 @@
             </h4>
             <div class="field">
               <b-switch size="is-small" type="is-light" v-model="showAhfullgreen">
-                <b-tooltip label="AHFULLGREEN is a code to calculate synthetic seismograms in elastic homogeneous fullspace." position="is-right" multilined dashed>
+                <b-tooltip label="AHFULLGREEN is a code to calculate synthetic seismograms in elorec homogeneous fullspace." position="is-right" multilined dashed>
                   AHFULLGREEN
                 </b-tooltip>
               </b-switch>
@@ -85,7 +85,7 @@
 
           detailed
           detail-key="id"
-          :opened-detailed="defaultOpenedDetails"
+          :opened-detailed="[$route.params.id ? $route.params.id : 'ah_store']"
           @click="openDetails">
 
           <template slot-scope="store">
@@ -115,7 +115,7 @@
           <template slot="detail" slot-scope="store">
             <div class="column content" style="padding-top: 0px;">
               <div class="columns">
-                <div class="column is-3">
+                <div class="column is-3" :id="store.row.id">
                   <h2>Modelling Code</h2>
                   <p>
                     <span class="tag is-success is-uppercase">{{ store.row.modelling_code_id }}</span>
@@ -146,7 +146,7 @@
             <div class="column">
               Download this GF store with
               <code>
-                fomosto download kinherd.org {{ store.row.id }}
+                fomosto download kinherd {{store.row.id}}
               </code>
             </div>
           </template>
@@ -179,8 +179,8 @@ export default {
 
   data () {
     return {
-      api_endpoint: 'https://greens-mill.pyrocko.org/api/',
-      static_endpoint: 'http://kinherd.org/gfws/static/',
+      api_endpoint: 'http://localhost:8085/gfws/api/',
+      static_endpoint: 'http://kinherd.org:8080/gfws/static/',
       isEmpty: true,
       data: undefined,
       defaultOpenedDetails: ['ah_store'],
@@ -215,7 +215,7 @@ export default {
         })
     },
     goToStore (storeId) {
-      window.location.href = `${this.static_endpoint}stores/${storeId}`
+      window.location.assign(`${this.static_endpoint}stores/${storeId}/`)
     },
     closeConfig () {
       this.modalData = undefined
@@ -244,6 +244,14 @@ export default {
       .catch(error => {
         console.log(error)
       })
+
+    if (this.$route.params.id !== undefined) {
+      var storeId = this.$route.params.id
+      window.setTimeout(function () {
+        let el = document.getElementById(storeId)
+        el.scrollIntoView(true)
+      }, 100)
+    }
   },
   computed: {
     store_list: function () {
