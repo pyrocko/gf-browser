@@ -84,8 +84,8 @@
           :mobile-cards="true"
 
           detailed
-          detail-key="id"
-          :opened-detailed="[$route.params.id ? $route.params.id : 'ah_store']"
+          detail-key="uuid"
+          :opened-detailed="[getStoreUUID($route.params.id ? $route.params.id : 'ah_store')]"
           @click="openDetails">
 
           <template slot-scope="store">
@@ -95,59 +95,66 @@
             <b-table-column field="type" label="Type">
               <b-tag>{{ store.row.short_type }}</b-tag>
             </b-table-column>
-            <b-table-column field="hor_extent" label="↔ Extent (km)" class="has-text-right">
+            <b-table-column field="hor_extent" label="↔ Extent" class="has-text-right">
               {{ store.row.distance_min | as_km }} - {{ store.row.distance_max | as_km }}
             </b-table-column>
             <b-table-column field="hor_spacing">
-              Δ {{ store.row.distance_delta | as_km }} km
+              @ {{ store.row.distance_delta | as_km }} km
             </b-table-column>
-            <b-table-column field="ver_extent" label="↕ Depth (km)" class="has-text-right">
+            <b-table-column field="ver_extent" label="↕ Depth" class="has-text-right">
               {{ store.row.source_depth_min | as_km }} - {{ store.row.source_depth_max | as_km }}
             </b-table-column>
             <b-table-column field="ver_spacing" label=" ">
-              Δ {{ store.row.source_depth_delta | as_km }} km
+              @ {{ store.row.source_depth_delta | as_km }} km
             </b-table-column>
             <b-table-column field="sample_rate" label="Sample Rate" class="has-text-right" sortable>
               {{ store.row.sample_rate | sample_rate }}
             </b-table-column>
+            <b-table-column field="uuid" label="UUID" class="has-text-right" style="font-family: monospace;">
+              <a :href="store.row.reference" style="color: #aaa">{{ store.row.uuid.slice(0, 6) }}</a>
+            </b-table-column>
           </template>
 
           <template slot="detail" slot-scope="store">
-            <div class="column content" style="padding-top: 0px;">
-              <div class="columns">
-                <div class="column is-3" :id="store.row.id">
-                  <h2>Modelling Code</h2>
-                  <p>
-                    <span class="tag is-success is-uppercase">{{ store.row.modelling_code_id }}</span>
-                  </p>
-                </div>
-                <div class="column">
-                  <h2>Size</h2>
-                  <p>
-                    <span class="tag is-success is-uppercase">{{ store.row.size | prettyBytes }}</span>
-                  </p>
-                </div>
-              </div>
+            <div class="column content">
+              <h1 :id="store.row.uuid">{{ store.row.id }} <a :href="store.row.reference" style="font-size: 11pt; font-weight: normal; padding-left: .75rem;">Link</a></h1>
+              <p>
+                Download this Green's Function store with
+                <code>fomosto download kinherd {{store.row.id}}</code>
+              </p>
+
+              <table style="max-width: 650px">
+                <tr>
+                  <td>Modelling Code</td>
+                  <td><span class="tag is-success is-uppercase">{{ store.row.modelling_code_id }}</span></td>
+                </tr>
+                <tr>
+                  <td>Horizontal extent</td>
+                  <td>{{ store.row.distance_min | as_km }} - {{ store.row.distance_max | as_km }} @ {{ store.row.distance_delta | as_km }} km</td>
+                </tr>
+                <tr>
+                  <td>Source depths</td>
+                  <td>{{ store.row.source_depth_min | as_km }} - {{ store.row.source_depth_max | as_km }} @ {{ store.row.source_depth_delta | as_km }} km</td>
+                </tr>
+                <tr>
+                  <td>Store size</td>
+                  <td>{{ store.row.size | prettyBytes }}</td>
+                </tr>
+                <tr>
+                  <td>UUID</td>
+                  <td><a :href="store.row.uuid" style="font-family: monospace;">{{ store.row.uuid }}</a></td>
+                </tr>
+              </table>
             </div>
             <div class="column content" style="padding-top: 0px; padding-bottom: 0px;">
-              <div class="columns">
-                <div class="column is-3 has-text-left">
-                  <button class="button" @click="showConfig(store)">Show config</button>
-                </div>
-                <div class="column has-text-left">
-                  <button class="button" @click="goToStore(store.row.id)">Show store</button>
-                </div>
-              </div>
+              <p>
+                <button class="button" @click="showConfig(store)">Show configuration</button>
+                <button class="button" @click="goToStore(store.row.id)">Show store directory</button>
+              </p>
             </div>
             <div class="column content" style="padding-bottom: 0px">
-              <h2>Velocity Model</h2>
+              <h3>Velocity Model</h3>
               <img class="image profile" :src="`${api_endpoint}${store.row.id}/profile`" />
-            </div>
-            <div class="column">
-              Download this GF store with
-              <code>
-                fomosto download kinherd {{store.row.id}}
-              </code>
             </div>
           </template>
 
@@ -204,6 +211,14 @@ export default {
     openDetails (row) {
       this.$refs.table.toggleDetails(row)
     },
+    getStoreUUID (ref) {
+      for (var is = 0; is < this.store_list.length; is++) {
+        let store = this.data.stores[is]
+        if (store.reference === ref || store.uuid === ref) {
+          return store.uuid
+        }
+      }
+    },
     showConfig (store) {
       axios
         .get(`${this.api_endpoint}${store.row.id}`)
@@ -232,7 +247,17 @@ export default {
       this.showQSEIS = true
       this.showQSSP = true
       this.showPSGRNPSCMP = true
+    },
+    scrollToStore () {
+      if (this.$route.params.id !== undefined) {
+        var storeRef = this.getStoreUUID(this.$route.params.id)
+        window.setTimeout(function () {
+          let el = document.getElementById(storeRef)
+          el.scrollIntoView(true)
+        }, 200)
+      }
     }
+
   },
   mounted () {
     axios
@@ -240,18 +265,11 @@ export default {
       .then(response => {
         this.data = response.data
         this.isEmpty = false
+        this.scrollToStore()
       })
       .catch(error => {
         console.log(error)
       })
-
-    if (this.$route.params.id !== undefined) {
-      var storeId = this.$route.params.id
-      window.setTimeout(function () {
-        let el = document.getElementById(storeId)
-        el.scrollIntoView(true)
-      }, 100)
-    }
   },
   computed: {
     store_list: function () {
