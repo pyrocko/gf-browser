@@ -120,7 +120,7 @@
               <h1 :id="store.row.uuid">{{ store.row.id }} <a :href="store.row.reference" style="font-size: 11pt; font-weight: normal; padding-left: .75rem;">Link</a></h1>
               <p>
                 Download this Green's Function store with
-                <code>fomosto download kinherd {{store.row.id}}</code>
+                <code class="select-all">fomosto download kinherd {{store.row.id}}</code>
               </p>
 
               <table style="max-width: 650px">
@@ -186,11 +186,10 @@ export default {
 
   data () {
     return {
-      api_endpoint: 'http://localhost:8085/gfws/api/',
+      api_endpoint: 'https://greens-mill.pyrocko.org/api/',
       static_endpoint: 'http://kinherd.org:8080/gfws/static/',
       isEmpty: true,
       data: undefined,
-      defaultOpenedDetails: ['ah_store'],
       modalData: undefined,
 
       searchStore: '',
@@ -282,6 +281,12 @@ export default {
 
       for (var is = 0; is < this.data.stores.length; is++) {
         var store = this.data.stores[is]
+        if (store.uuid === undefined) {
+          store.uuid = 'none'
+        }
+        if (store.reference === undefined) {
+          store.reference = 'none'
+        }
 
         // Extent
         var extentKm = store.distance_max / km
@@ -367,5 +372,12 @@ img.profile {
 
 h2 {
   font-size: 13pt !important;
+}
+
+code.select-all {
+  -webkit-user-select: all;
+  -moz-user-select: all;
+  -ms-user-select: all;
+  user-select: all;
 }
 </style>

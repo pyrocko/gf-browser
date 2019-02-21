@@ -5,6 +5,14 @@
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <title>Pyrocko Green's function Browser</title>
     <link rel="stylesheet" href="//cdn.materialdesignicons.com/2.0.46/css/materialdesignicons.min.css">
+    <style>
+    code.select-all {
+      -webkit-user-select: all;
+      -moz-user-select: all;
+      -ms-user-select: all;
+      user-select: all;
+    }
+    </style>
   </head>
   <body>
     <section class="section">
@@ -23,14 +31,72 @@
     <div class="container content">
       This online repository holds pre-calculated Green's function stores for seismic waveform and static displacement forward-modelling at different spatial scales and sampling rates.
       <p>
-      You can download a GF store with Fomosto: <code>fomosto download kinherd &lt;store_id&gt;</code>.
+        You can download a GF store with Fomosto: <code class="select-all">fomosto download kinherd &lt;store_id&gt;</code>.
       </p>
       <p>
-        <a href="https://pyrocko.org/docs/current/apps/fomosto/">See Pyrocko's documentation</a> for more information on Green's function stores.
+        <a href="https://pyrocko.org/docs/current/apps/fomosto/">See Pyrocko's documentation</a> for more information on Green's function stores, or a <a href="#store-types">list of store types</a>.
       </p>
     </div>
     <div id="app"></div>
     <!-- built files will be auto injected -->
+    <section class="section">
+      <div class="container content" id="store-types">
+        Green’s tensor component and configuration types for GF stores. Configuration types A and B stand for rotation-symmetric mediumswith common-depth receivers (A) or variable-depth receivers (B). Configuration type C is used for three-dimensional media and variable receiver postions:
+        <table style="max-width: 700px;">
+          <thead>
+            <tr>
+              <th></th>
+              <th>Source Type</th>
+              <th>Receiver Distances</th>
+            </tr>
+          </thead>
+          <thead>
+            <tr>
+              <th>Contig Types A & B</th>
+              <th></th>
+              <th></th>
+            </tr>
+          </thead>
+          <tr>
+            <td>elastic10</td>
+            <td>Moment tensor</td>
+            <td>all</td>
+          </tr>
+          <tr>
+            <td>elastic8</td>
+            <td>Moment tensor</td>
+            <td>far-field only</td>
+          </tr>
+          <tr>
+            <td>elastic5</td>
+            <td>Single force</td>
+            <td>all</td>
+          </tr>
+          <tr>
+            <td>elastic2</td>
+            <td>Isotrop</td>
+            <td>all</td>
+          </tr>
+          <tr>
+            <td>poroelastic10</td>
+            <td>Flow rarte, pressure</td>
+            <td>near-field (quasi-static)</td>
+          </tr>
+          <thead>
+            <tr>
+              <th>Config type C</th>
+              <th></th>
+              <th></th>
+            </tr>
+          </thead>
+          <tr>
+            <td>elastic18</td>
+            <td>Moment tensor</td>
+            <td>all</td>
+          </tr>
+        </table>
+      </div>
+    </section>
     <section class="section">
       <div class="container column content">
         <h2 class="subtitle">References</h2>
@@ -57,7 +123,7 @@
     <footer class="footer">
       <div class="content has-text-centered">
         <p>
-          <strong>Pyrocko</strong> Core Devs, 2018
+          <strong>Pyrocko</strong> Core Devs, 2019
         </p>
       </div>
     </footer>
