@@ -281,11 +281,14 @@ export default {
 
       for (var is = 0; is < this.data.stores.length; is++) {
         var store = this.data.stores[is]
-        if (store.uuid === undefined) {
-          store.uuid = 'none'
+        if (!store.uuid) {
+          store.uuid = 'none-' + is.toString()
         }
-        if (store.reference === undefined) {
+        if (!store.reference) {
           store.reference = 'none'
+        }
+        if (!store.modelling_code_id) {
+          store.modelling_code_id = 'unknown'
         }
 
         // Extent

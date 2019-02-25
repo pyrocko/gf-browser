@@ -12,16 +12,30 @@
       -ms-user-select: all;
       user-select: all;
     }
+
+    div.logo-gfz {
+      background-image: url("/static/logo-gfz.svg");
+      background-repeat: no-repeat;
+      background-position: right top;
+      background-size: auto 60%;
+
+    }
+
+    img.logo-contrib {
+      max-height: 75px;
+      min-width: 75px;
+      padding: 1rem;
+    }
     </style>
   </head>
   <body>
     <section class="section">
-      <div class="container">
+      <div class="container logo-gfz">
         <h1 class="title">
           <a href="https://pyrocko.org">
             <img src="https://pyrocko.org/_static/pyrocko.svg" style="height: 2em; margin-right: 1rem;"/>
           </a>
-          Green's Mill
+          Pyrocko - Green's Mill
         </h1>
         <h1 class="subtitle">
           Browse and download pre-calculated Green's function stores
@@ -34,7 +48,19 @@
         You can download a GF store with Fomosto: <code class="select-all">fomosto download kinherd &lt;store_id&gt;</code>.
       </p>
       <p>
-        <a href="https://pyrocko.org/docs/current/apps/fomosto/">See Pyrocko's documentation</a> for more information on Green's function stores, or a <a href="#store-types">list of store types</a>.
+        For more information on Pyrocko Green's function stores <a href="https://pyrocko.org/docs/current/apps/fomosto/">see Pyrocko's documentation</a>, or a the <a href="#store-types">list of store types</a>.
+      </p>
+    </div>
+    <div class="container content">
+      <h4>Contributors</h4>
+      <div style="margin: .5rem auto; width: fit-content;">
+        <a href="https://www.uni-kiel.de"><img class="logo-contrib" src="./static/cau.svg" /></a>
+        <a href="https://dfg.de"><img class="logo-contrib" src="./static/dfg.svg" /></a>
+        <a href="https://www.uni-hamburg.de"><img class="logo-contrib" src="./static/uhh.svg" /></a>
+        <a href="https://uni-potsdam.de"><img class="logo-contrib" src="./static/up.svg" /></a>
+      </div>
+      <p>
+        Do you want to contribute and share your Green's function store? Contact us at <a href="mailto:info@pyrocko.org">info@pyrocko.org</a>.
       </p>
     </div>
     <div id="app"></div>
@@ -123,7 +149,7 @@
     <footer class="footer">
       <div class="content has-text-centered">
         <p>
-          <strong>Pyrocko</strong> Core Devs, 2019
+          <a href="https://pyrocko.org" style="font-weight: 800; color: black;">Pyrocko</a> Core Devs, 2019
         </p>
       </div>
     </footer>
