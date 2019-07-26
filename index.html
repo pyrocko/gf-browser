@@ -64,11 +64,13 @@
       </p>
       <article class="message">
         <div class="message-body">
-          <strong>Tip:</strong> Searching for a Crust2x2 Profile at a coordinate? Use this snippet to find the corresponding type:
+          <strong>Tip:</strong> Searching for a Crust2x2 Profile at a coordinate? Use this snippet to find the corresponding Crust2.0 type:
             <div class="content" style="font-family: monospace; font-size: smaller; padding-left: 1em; padding-top: .5em;">
               <span style="color: #008800; font-weight: bold">import</span> <span style="color: #0e84b5; font-weight: bold">pyrocko.crust2x2</span><br />
               profile <span style="color: #333333">=</span> pyrocko<span style="color: #333333">.</span>crust2x2<span style="color: #333333">.</span>get_profile(lat<span style="color: #333333">=</span><span style="color: #6600EE; font-weight: bold">21.43</span>, lon<span style="color: #333333">=</span><span style="color: #6600EE; font-weight: bold">5.</span>)<br />
-              <span style="color: #008800; font-weight: bold">print</span>(profile)
+              <span style="color: #008800; font-weight: bold">print</span>(profile)<br />
+              >>> type, name:              <b>H1</b>, early/mid  Proter., no seds.<br />
+              >>> ...
             </div>
         </div>
       </article>
@@ -77,7 +79,7 @@
     <!-- built files will be auto injected -->
     <section class="section">
       <div class="container content" id="store-types">
-        Green’s tensor component and configuration types for GF stores. Configuration types A and B stand for rotation-symmetric mediumswith common-depth receivers (A) or variable-depth receivers (B). Configuration type C is used for three-dimensional media and variable receiver postions:
+        Green’s tensor component and configuration types for GF stores. Configuration types A and B stand for rotation-symmetric mediums with common-depth receivers (A) or variable-depth receivers (B). Configuration type C is used for three-dimensional media and variable receiver postions:
         <table style="max-width: 700px;">
           <thead>
             <tr>
